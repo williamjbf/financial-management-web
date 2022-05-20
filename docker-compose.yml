@@ -1,0 +1,32 @@
+version: '3'
+services:
+  app:
+    image: 'financial-management-web/app:1'
+    build: ./app
+    container_name: app-web
+    ports:
+      - "8082:8080"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/bankapi
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+  db:
+    container_name: database-web
+    image: 'financial-management-web/database:1'
+    build: ./postgres
+    ports:
+      - "5434:5432"
+    volumes:
+      - "dbdata:/var/lib/postgresql/data"
+  frontend:
+    container_name: frontend-web
+    image: 'financial-management-web/frontend:1'
+    build: ./web
+    ports:
+      - "8083:80"
+volumes:
+  dbdata:
+    driver: local
