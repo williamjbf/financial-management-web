@@ -15,7 +15,7 @@ public class Financial {
     @Column(columnDefinition = "geography")
     private Point point;
     @ManyToOne
-    private TypeFinancial tpe;
+    private TypeFinancial type;
 
     @ManyToOne
     private CategoryFinancial category;
@@ -52,12 +52,12 @@ public class Financial {
         this.point = point;
     }
 
-    public TypeFinancial getTpe() {
-        return tpe;
+    public TypeFinancial getType() {
+        return type;
     }
 
-    public void setTpe(TypeFinancial tpe) {
-        this.tpe = tpe;
+    public void setType(TypeFinancial type) {
+        this.type = type;
     }
 
     public CategoryFinancial getCategory() {
