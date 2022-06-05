@@ -1,19 +1,21 @@
 package com.github.williamjbf.app.model;
 
+import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
 @Entity
+@SequenceGenerator(name = "seq_financial", initialValue = 1,allocationSize = 1)
 public class Financial {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_financial")
     private long id;
     private String name;
     private double value;
-    @Column(columnDefinition = "geography")
-    private Point point;
+    private Geometry point;
     @ManyToOne
     private TypeFinancial type;
 
@@ -44,11 +46,11 @@ public class Financial {
         this.value = value;
     }
 
-    public Point getPoint() {
+    public Geometry getPoint() {
         return point;
     }
 
-    public void setPoint(Point point) {
+    public void setPoint(Geometry point) {
         this.point = point;
     }
 
