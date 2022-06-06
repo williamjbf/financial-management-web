@@ -1,5 +1,6 @@
 package com.github.williamjbf.app.controller;
 
+import com.github.williamjbf.app.model.CategoryFinancial;
 import com.github.williamjbf.app.model.TypeFinancial;
 import com.github.williamjbf.app.repository.TypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,11 @@ public class TypeController {
     @GetMapping("/list")
     public List<TypeFinancial> list(){
         return repository.findAll();
+    }
+
+    @GetMapping("/find")
+    public TypeFinancial findByDescription(@RequestParam("description") String description){
+        return repository.findByDescription(description);
     }
 
     @PostMapping("/save")

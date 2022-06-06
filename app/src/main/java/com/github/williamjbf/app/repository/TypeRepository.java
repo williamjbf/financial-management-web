@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TypeRepository extends JpaRepository<TypeFinancial, Long> {
+
+    TypeFinancial findByDescription(String description);
+
 }
