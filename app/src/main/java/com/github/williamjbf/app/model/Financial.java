@@ -16,10 +16,12 @@ public class Financial {
     private String name;
     private double value;
     private Geometry point;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "type_id", referencedColumnName = "id")
     private TypeFinancial type;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
     private CategoryFinancial category;
 
     public long getId() {

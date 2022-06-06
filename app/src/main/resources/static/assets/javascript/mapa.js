@@ -31,20 +31,68 @@ function addMarker(evt){
 
 function salvar(){
 
-    const obj = {
-        nome: document.getElementById('nome').value,
-        lat: marker.getPosition().lat(),
-        lng: marker.getPosition().lng()
-    };
+    let typeJson = {
+        id:0,
+    }
+    let categoryJson ={
+        id:0,
+    }
 
-    fetch("http://localhost:3000/pontos",{
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(obj)
-    }).then(response =>{alert('Salvo com sucesso')})
-    .catch(error => alert('Falha ao salvar!'));    
+
+    let typeSelecionado = document.getElementById("tipo").value;
+
+    let categorySelecionado = document.getElementById("categoria").value;
+
+    const pointObj = {
+        type: "Point",
+        coordinates: [marker.getPosition().lat(),marker.getPosition().lng()]
+    }
+
+    $.ajax({
+        method: "GET",
+        url:"type/find",
+        data:"description="+typeSelecionado,
+        contentType: "application/json; charset=utf-8",
+        success: function (response){
+            typeJson.id = response.id;
+            console.log(typeJson);
+        }
+    }).fail(function (xhr,status,errorThrown){
+        alert("error ao puxar os tipos: " + xhr.responseText);
+    })
+
+    $.ajax({
+        method: "GET",
+        url:"category/find",
+        data:"description="+categorySelecionado,
+        contentType: "application/json; charset=utf-8",
+        success: function (response){
+            categoryJson.id = response.id;
+            console.log(categoryJson);
+        }
+    }).fail(function (xhr,status,errorThrown){
+        alert("error ao puxar as categorias: " + xhr.responseText);
+    })
+
+    const obj={
+        name: document.getElementById("name").value,
+        value:document.getElementById("valor").value,
+        point:pointObj,
+        type:typeJson,
+        category:categoryJson,
+    }
+
+    $.ajax({
+        method: "POST",
+        url:"financial/save",
+        data: JSON.stringify(obj),
+        contentType: "application/json; charset=utf-8",
+        success: function (response){
+            console.log(response)
+        }
+    }).fail(function (xhr,status,errorThrown){
+        console.log(JSON.stringify(obj));
+        alert("error ao salvar: " + xhr.responseText);
+    })
 
 }
