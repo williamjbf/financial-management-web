@@ -20,6 +20,11 @@ public class CategoryController {
         return repository.findAll();
     }
 
+    @GetMapping("/find")
+    public CategoryFinancial findByDescription(@RequestParam("description") String description){
+        return repository.findByDescription(description);
+    }
+
     @PostMapping("/save")
     public CategoryFinancial save(@RequestBody CategoryFinancial categoryFinancial){
         return repository.save(categoryFinancial);
