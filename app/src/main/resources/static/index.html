@@ -11,7 +11,7 @@
   <script src="assets/javascript/index.js"></script>
 </head>
 
-<body onload="listar()">
+<body onload="listar();getOpcoesForm()" >
 
   <div class="container-fluid">
 
@@ -19,7 +19,7 @@
     <h1 class="text-center p-4">Controle de gastos</h1>
 
     <!-- Botão para acionar modal -->
-    <button type="button" onclick="getOpcoesForm()" class="btn btn-primary mb-4" data-toggle="modal" data-target="#ExemploModalCentralizado">
+    <button type="button" onclick="cleanForm()" class="btn btn-primary mb-4" data-toggle="modal" data-target="#ExemploModalCentralizado">
       Novo relatório
     </button>
 
@@ -35,9 +35,10 @@
             </button>
           </div>
           <div class="modal-body">
-            <div id="form">
-              <form action="/pagina-processa-dados-do-form" method="post">
+            <div>
+              <form method="post" id="form">
                 <div>
+                  <input id="id" type="hidden" value="0">
                   <label for="name">Nome:</label>
                   <input class="form-control" type="text" id="name">
                   <label for="valor">Valor:</label>

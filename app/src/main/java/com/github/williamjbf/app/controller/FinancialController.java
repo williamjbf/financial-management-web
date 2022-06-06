@@ -31,4 +31,9 @@ public class FinancialController {
     public Financial save(@RequestBody FinancialDto financial){
         return service.save(financial);
     }
+
+    @GetMapping("/find")
+    public Financial findById(@RequestParam("id") long id){
+        return repository.findById(id).get();
+    }
 }

@@ -29,7 +29,7 @@ function addMarker(evt){
     marker.setPosition(evt.latLng);
 }
 
-async function salvar(id) {
+async function salvar() {
 
     let idCategory = await buscarIdCategory();
     let idType = await buscarIdType();
@@ -43,16 +43,11 @@ async function salvar(id) {
     }
 
     const obj = {
-        id:id,
         name: document.getElementById("name").value,
         value: document.getElementById("valor").value,
         point: pointObj,
         type: idType.id,
         category: idCategory.id,
-    }
-
-    if (id != null || id !== ''.trim()){
-        obj.id = id
     }
 
     $.ajax({
@@ -67,7 +62,7 @@ async function salvar(id) {
         alert("error ao salvar: " + xhr.responseText);
     })
 
-    location.reload();
+    //location.reload();
 }
 
 async function buscarIdType(){
@@ -114,7 +109,7 @@ function getOpcoesForm(){
             $('#tipo > option').remove();
 
             for(let index =0; index <response.length; index++){
-                $('#tipo').append('<option>'+ response[index].description +'</option>');
+                $('#tipo').append('<option value="'+response[index].description+'">'+ response[index].description +'</option>');
             }
         }
     }).fail(function (xhr,status,errorThrown){
@@ -130,12 +125,13 @@ function getOpcoesForm(){
             $('#categoria > option').remove();
 
             for(let index =0; index <response.length; index++){
-                $('#categoria').append('<option>'+ response[index].description +'</option>');
+                $('#categoria').append('<option value="'+response[index].description+'">'+ response[index].description +'</option>');
             }
         }
     }).fail(function (xhr,status,errorThrown){
         alert("error ao puxar os tipos: " + xhr.responseText);
     })
+
 }
 
 function listar(){
@@ -152,7 +148,7 @@ function listar(){
                     '<td>'+response[index].category.description+'</td>' +
                     '<td>'+response[index].type.description+'</td>' +
                     '<td>'+response[index].value+'</td>' +
-                    '<td><button type="button" class="btn btn-info" onclick="edit('+ response[index].id+')">Ver</button></td>'+
+                    '<td><button type="button" class="btn btn-info" data-toggle="modal" data-target="#ExemploModalCentralizado" onclick="edit('+ response[index].id+')">Ver</button></td>'+
                     '</tr>');
             }
         }
@@ -160,4 +156,39 @@ function listar(){
         alert("error when searching for user: " + xhr.responseText);
     })
 
+}
+
+function cleanForm(){
+    document.getElementById('form').reset()
+    marker.setPosition(new google.maps.LatLng(center.lat,center.lng))
+
+}
+
+function edit(id){
+
+    cleanForm();
+
+    preencherForm(id)
+
+}
+
+function preencherForm(id){
+    $.ajax({
+        method: "GET",
+        url:"financial/find",
+        data:"id="+id,
+        contentType: "application/json; charset=utf-8",
+        success: function (response) {
+            console.log(response);
+            $('#id').val(response.id);
+            $('#name').val(response.name);
+            $('#valor').val(response.value);
+            $('#tipo option[value=' + response.type.description + ']').attr('selected', 'selected');
+            $('#categoria  option[value=' + response.category.description + ']').attr('selected', 'selected');
+            marker.setPosition(new google.maps.LatLng(response.point.coordinates[0],response.point.coordinates[1]))
+
+        }
+    }).fail(function (xhr,status,errorThrown){
+        alert("error ao puxar os tipos: " + xhr.responseText);
+    })
 }
