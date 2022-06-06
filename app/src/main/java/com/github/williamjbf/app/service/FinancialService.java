@@ -26,8 +26,8 @@ public class FinancialService {
         financial.setName(financialDto.getName());
         financial.setValue(financialDto.getValue());
         financial.setPoint(financialDto.getPoint());
-        //financial.setType(typeRepository.findById(financialDto.getType()).get());
-        //financial.setCategory(categoryRepository.findById(financialDto.getCategory()).get());
+        financial.setType(typeRepository.findById(financialDto.getType()).get());
+        financial.setCategory(categoryRepository.findById(financialDto.getCategory()).get());
 
         return financialRepository.save(financial);
     }

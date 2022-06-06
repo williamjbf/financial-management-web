@@ -34,8 +34,8 @@ async function salvar() {
     let idCategory = await buscarIdCategory();
     let idType = await buscarIdType();
 
-    console.log(idType);
-    console.log(idCategory);
+    console.log(idType.id);
+    console.log(idCategory.id);
 
     const pointObj = {
         type: "Point",
