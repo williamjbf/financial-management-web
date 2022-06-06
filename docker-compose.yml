@@ -9,7 +9,7 @@ services:
     depends_on:
       - db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/bankapi
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/financial-management-db
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
@@ -21,12 +21,6 @@ services:
       - "5434:5432"
     volumes:
       - "dbdata:/var/lib/postgresql/data"
-  frontend:
-    container_name: frontend-web
-    image: 'financial-management-web/frontend:1'
-    build: ./web
-    ports:
-      - "8083:80"
 volumes:
   dbdata:
     driver: local
