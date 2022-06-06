@@ -5,10 +5,11 @@ import com.vividsolutions.jts.geom.Point;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @SequenceGenerator(name = "seq_financial", initialValue = 1,allocationSize = 1)
-public class Financial {
+public class Financial implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_financial")
@@ -16,11 +17,11 @@ public class Financial {
     private String name;
     private double value;
     private Geometry point;
-    @ManyToOne(cascade = CascadeType.DETACH)
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "type_id", referencedColumnName = "id")
     private TypeFinancial type;
 
-    @ManyToOne(cascade = CascadeType.DETACH)
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private CategoryFinancial category;
 

@@ -29,70 +29,72 @@ function addMarker(evt){
     marker.setPosition(evt.latLng);
 }
 
-function salvar(){
+async function salvar() {
 
-    let typeJson = {
-        id:0,
-    }
-    let categoryJson ={
-        id:0,
-    }
+    let idCategory = await buscarIdCategory();
+    let idType = await buscarIdType();
 
-
-    let typeSelecionado = document.getElementById("tipo").value;
-
-    let categorySelecionado = document.getElementById("categoria").value;
+    console.log(idType);
+    console.log(idCategory);
 
     const pointObj = {
         type: "Point",
-        coordinates: [marker.getPosition().lat(),marker.getPosition().lng()]
+        coordinates: [marker.getPosition().lat(), marker.getPosition().lng()]
+    }
+
+    const obj = {
+        name: document.getElementById("name").value,
+        value: document.getElementById("valor").value,
+        point: pointObj,
+        type: idType.id,
+        category: idCategory.id,
     }
 
     $.ajax({
+        method: "POST",
+        url: "financial/save",
+        data: JSON.stringify(obj),
+        contentType: "application/json; charset=utf-8",
+        success: function (response) {
+            console.log(response)
+        }
+    }).fail(function (xhr, status, errorThrown) {
+        alert("error ao salvar: " + xhr.responseText);
+    })
+
+}
+
+async function buscarIdType(){
+
+    let typeSelecionado = document.getElementById("tipo").value;
+
+    return $.ajax({
         method: "GET",
         url:"type/find",
         data:"description="+typeSelecionado,
         contentType: "application/json; charset=utf-8",
         success: function (response){
-            typeJson.id = response.id;
-            console.log(typeJson);
+            return response.id;
         }
     }).fail(function (xhr,status,errorThrown){
         alert("error ao puxar os tipos: " + xhr.responseText);
     })
+}
 
-    $.ajax({
+async function buscarIdCategory(){
+
+    let categorySelecionado = document.getElementById("categoria").value;
+
+    return $.ajax({
         method: "GET",
-        url:"category/find",
-        data:"description="+categorySelecionado,
+        url: "category/find",
+        data: "description=" + categorySelecionado,
         contentType: "application/json; charset=utf-8",
-        success: function (response){
-            categoryJson.id = response.id;
-            console.log(categoryJson);
+        success: function (response) {
+            return response.id;
         }
-    }).fail(function (xhr,status,errorThrown){
+    }).fail(function (xhr, status, errorThrown) {
         alert("error ao puxar as categorias: " + xhr.responseText);
     })
-
-    const obj={
-        name: document.getElementById("name").value,
-        value:document.getElementById("valor").value,
-        point:pointObj,
-        type:typeJson,
-        category:categoryJson,
-    }
-
-    $.ajax({
-        method: "POST",
-        url:"financial/save",
-        data: JSON.stringify(obj),
-        contentType: "application/json; charset=utf-8",
-        success: function (response){
-            console.log(response)
-        }
-    }).fail(function (xhr,status,errorThrown){
-        console.log(JSON.stringify(obj));
-        alert("error ao salvar: " + xhr.responseText);
-    })
-
 }
+
