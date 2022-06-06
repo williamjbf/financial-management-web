@@ -29,7 +29,7 @@ public class FinancialService {
         financial.setType(typeRepository.findById(financialDto.getType()).get());
         financial.setCategory(categoryRepository.findById(financialDto.getCategory()).get());
 
-        return financialRepository.save(financial);
+        return financialRepository.saveAndFlush(financial);
     }
 
 }
